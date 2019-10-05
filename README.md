@@ -1,4 +1,5 @@
-# AppSlider-Firmware - the open source firmware for motorized camera sliders
+# AppSlider - Firmware 
+The open source firmware for motorized camera sliders
 
 ## Control your camera on a slider with Shoot-Move-Shoot 
 
@@ -11,15 +12,17 @@ For other sliders you can change the parameters in the configuration.h file.
 
 
 ### M750 command for Shoot-Move-Shoot
+```cpp
 R[long]     // Fokus-Time | default: 0
 S[long]     // Shoot-Time  | default: 0
 T[Boolean]  // true to press focus and shoot button at the same time to release the shutter | default: true
 I[float]    // Upstream delay
 J[float]    // Downstream delay
-For a Shoot-Move-Shoot movement only two of the following three parameters need to set.
+
+/* For a Shoot-Move-Shoot movement only two of the following three parameters need to set. */
 X[float]    // Final position in X direction
 E[float]    // Delta movement, difference of movement between each shot
 P[long];    // Total shot images + 1
-
+```
 ### For controlling 
 Use the manual input of the Software Repetier-Host or the camera slider spezific software by TuncerTec for Android and Windows: https://tuncertec.de/software/
