@@ -1,0 +1,94 @@
+﻿<Window x:Class="Kamera_Linearführung.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Icon="Images\icon.png"
+        Title="Slider" Height="426.233" MinWidth="595" Width="598" Closing="Window_Closing">
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition x:Name="expansionsColumnAbläufe"  Width="120" MaxWidth="120"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="comboBox_com" HorizontalAlignment="Left" Margin="55,28,0,0" VerticalAlignment="Top" Width="78" MouseDoubleClick="comboBox_com_MouseDoubleClick" Height="22" ToolTip="Auswahlmöglichkeit des COM-Anschlusses.&#10;Wählen Sie den COM aus der zu ihrem Slider gehört.&#10;Falls Sie nicht wissen welcher COM dies ist benutzen Sie bitte &quot;Auto Connect&quot;"/>
+        <Label Content="COM:" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Height="26" Width="40"/>
+        <Button x:Name="button_connect" Content="Verbinden" HorizontalAlignment="Right" Margin="0,28,116,0" VerticalAlignment="Top" Width="73" Click="button_connect_Click" Height="22" ToolTip="Direkte Verbindung mit dem Slider über den Ausgewählten COM herstellen"/>
+
+
+        <Grid x:Name="grid_Steuerung" Margin="10,55,3,0" IsEnabled="False" Height="147" VerticalAlignment="Top">
+            <Grid x:Name="grid_GBefehle" VerticalAlignment="Top" Height="30" Margin="-1,-1,0,0">
+                <TextBox x:Name="textBox_senden_gCode" Height="22" Margin="46,2,191,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" KeyDown="textBox_senden_gCode_KeyDown"/>
+                <Button x:Name="button_senden_gCode" Content="Senden" HorizontalAlignment="Right" Margin="0,2,113,0" VerticalAlignment="Top" Width="73" Height="22" Click="button_senden_gCode_Click"/>
+                <Label Content="GCode" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,-2,0,0"/>
+            </Grid>
+            <TextBox x:Name="textBox_speed" HorizontalAlignment="Left" Height="23" Margin="112,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65" Text="4800" KeyDown="textBox_speed_KeyDown"/>
+            <Label Content="Geschwindigkeit" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+            <Label Content="mm/min" HorizontalAlignment="Left" Margin="182,36,0,0" VerticalAlignment="Top"/>
+            <Slider x:Name="slider_speed" Margin="10,67,147,0" VerticalAlignment="Top" Maximum="18000" Value="5000" ValueChanged="slider_speed_ValueChanged" Minimum="1"/>
+            <TextBox x:Name="textBox_position" HorizontalAlignment="Left" Height="23" Margin="112,93,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65" Text="0" KeyDown="textBox_position_KeyDown"/>
+            <Label Content="mm" HorizontalAlignment="Left" Margin="182,90,0,0" VerticalAlignment="Top"/>
+            <Slider x:Name="slider_position" Margin="10,121,147,0" VerticalAlignment="Top" ValueChanged="slider_position_ValueChanged" PreviewMouseUp="slider_position_PreviewMouseUp" Maximum="902"/>
+            <Label x:Name="label_benötigteZeit" TextBlock.TextAlignment="Right" Content="00:00:00&#xA;.000" HorizontalAlignment="Right" Margin="0,85,147,0" VerticalAlignment="Top" Height="36" Width="58" FontSize="10"/>
+            <Label Content="Position" HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top"/>
+            <Button x:Name="button_nullen" Content="Nullen" HorizontalAlignment="Right" Margin="0,63,80,0" VerticalAlignment="Top" Width="62" Height="22" Click="button_nullen_Click" Background="#FFF04444"/>
+            <Button x:Name="button_MotorenPower" Content="Motoren aus" HorizontalAlignment="Right" Margin="0,36,80,0" VerticalAlignment="Top" Width="62" Height="22" Click="button_MotorenPower_Click" ToolTip="Schaltet die Motoren des Sliders aus" FontSize="10"/>
+            <Button x:Name="button_stop" HorizontalAlignment="Right" Margin="0,36,0,0" VerticalAlignment="Top" Width="76" Height="76" Foreground="Black" Click="button_stop_Click">
+                <StackPanel>
+                    <Image Source="Images/stop-sign-clipart.png" ToolTip="Stoppt den aktuellen Vorgang des Sliders" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="button_fahren" Content="Fahren" HorizontalAlignment="Right" Margin="0,90,80,0" VerticalAlignment="Top" Width="62" Height="22" Click="button_fahren_Click" FontWeight="Bold" />
+            <Button x:Name="button_KameraSteuerung" Content="Shoot Move Shoot" HorizontalAlignment="Right" Margin="0,117,0,0" VerticalAlignment="Top" Width="142" Height="22" RenderTransformOrigin="0.477,-1.295" ToolTip="" Click="button_KameraSteuerung_Click" />
+            <Rectangle Height="2" Margin="-10,29,-6,0" VerticalAlignment="Top" Fill="#FFDEDEDE" Panel.ZIndex="2"/>
+            <Rectangle Height="2" Margin="-10,145,-6,0" VerticalAlignment="Top" Fill="#FFDEDEDE"/>
+        </Grid>
+        <Grid x:Name="grid_ListBoxSteuerelemente" HorizontalAlignment="Right" Height="36" VerticalAlignment="Top" Width="142" Margin="0,202,3,0" Panel.ZIndex="2">
+            <CheckBox x:Name="checkBox_autoscroll" Content="Autoscroll" HorizontalAlignment="Right" Margin="0,6,16,0" VerticalAlignment="Top" Checked="checkBox_autoscroll_Checked" Unchecked="checkBox_autoscroll_Unchecked" IsChecked="True" />
+            <Button x:Name="button_clear" Content="Clear" HorizontalAlignment="Right" Margin="0,4,94,0" VerticalAlignment="Top" Width="48" Height="18" Click="button_clear_Click" FontSize="10"/>
+        </Grid>
+        <ListBox x:Name="listBox_ereignis" Margin="10,229,9,10" />
+        <Button x:Name="button_erweiterteAnsicht" Content="Erweiterte Ansicht" HorizontalAlignment="Right" Margin="0,56,3,0" VerticalAlignment="Top" Width="108" Height="22"  RenderTransformOrigin="0.709,0.423" Click="button_erweiterteAnsicht_Click"/>
+        <Button x:Name="button_AutoConnect" Content="Automatisch" HorizontalAlignment="Right" Margin="0,28,29,0" VerticalAlignment="Top" Width="82" Click="button_AutoConnect_Click" Height="22" ToolTip="Automatisches verbinden mit dem Slider"/>
+
+        <Button x:Name="button_editorWindow" Content="Ablauf erstellen" HorizontalAlignment="Right" Margin="0,29,3,0" VerticalAlignment="Top" Width="107" Height="22"  RenderTransformOrigin="0.709,0" Click="button_editorWindow_Click" Grid.Column="1" ToolTip="Zum erstllen einer Schaltfläschen mit einprogrammierten Abläufen "/>
+
+        <Menu Height="21" VerticalAlignment="Top" Grid.ColumnSpan="2">
+            <MenuItem Header="Datei">
+                <MenuItem Header="Beenden" Click="MenuItem_Beenden_Click"/>
+            </MenuItem>
+            <MenuItem Header="Bearbeiten">
+                <MenuItem Header="Ablauf erstellen" Click="MenuItem_Bearbeiten_Click"/>
+            </MenuItem>
+            <MenuItem Header="Ansicht">
+                <CheckBox x:Name="menuCheckBox_erweiterteAnsicht" Content="Erweiterte Ansicht" Checked="menuCheckBox_erweiterteAnsicht_Checked" Unchecked="menuCheckBox_erweiterteAnsicht_Unchecked"/>
+                <CheckBox x:Name="menuCheckBox_AblaufButtonsAnsicht" Content="Ablauf-Buttons anzeigen" Checked="menuCheckBox_AblaufButtonsAnsicht_Checked" Unchecked="menuCheckBox_AblaufButtonsAnsicht_Unchecked"/>
+            </MenuItem>
+            <MenuItem Header="Einstellungen">
+                <CheckBox x:Name="menuCheckBox_ShootMitFokus" Content="Bei Shoot den Fokus gleichzeitig mit betätigen" IsChecked="true" />
+                <CheckBox x:Name="menuCheckBox_FahreDirekt" Content="Fahre direkt" ToolTip="Um nicht jede Positionierung mittels der Schaltfläsche &quot;Fahren&quot; bestätigen zu müssen"/>
+            </MenuItem>
+            <MenuItem Header="Hilfe">
+                <MenuItem Header="Updates" Click="MenuItem_Updates"/>
+                <MenuItem Header="Zur Website" Click="MenuItem_zurWebSite_Click"/>
+                <MenuItem Header="Über Slider" Click="MenuItem_überSlider_Click"/>
+            </MenuItem>
+        </Menu>
+        <ListView x:Name="listBox_Abläufe" Grid.Column="1" HorizontalAlignment="Right" Margin="0,83,0,41" Width="110" SelectionChanged="listBox_Abläufe_SelectionChanged" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <WrapPanel>
+                        <Rectangle Width="18" Height="18" Margin="0,0,0,0" Fill="#7FFFE4C4"></Rectangle>
+                        <Button Margin="5,0,0,0" Width="73" Height="20" Content="{Binding Name}" Command="{Binding SomeCommand}" IsEnabled="{Binding isEnabled}" />
+                    </WrapPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button x:Name="button_ablaufBearbeiten" Content="Ablauf Bearbeiten" HorizontalAlignment="Right" Margin="0,56,3,0" VerticalAlignment="Top" Width="107" Height="22"  RenderTransformOrigin="0.709,0" Grid.Column="1" Click="button_ablaufBearbeiten_Click" ToolTip="Den selektierten Ablauf bearbeiten"/>
+        <Expander x:Name="expander_ablauf" Header="" HorizontalAlignment="Right" Margin="0,28,0,0" VerticalAlignment="Top" Width="24" ExpandDirection="Right" Height="23" Expanded="Expander_Expanded" RenderTransformOrigin="0.933,0.522" Collapsed="Expander_Collapsed">
+            <!-- <Grid Background="#FFE5E5E5"></Grid>-->
+        </Expander>
+        <Button x:Name="button_ablaufUP" Content="^" HorizontalAlignment="Right" Margin="0,0,89,14" VerticalAlignment="Bottom" Width="21" Height="22"  RenderTransformOrigin="0.709,0" Grid.Column="1" Click="button_ablaufUP_Click" ToolTip="Verschiebt den selektierten Ablauf um eine Stelle nach oben"/>
+        <Button x:Name="button_ablaufDOWN" Content="v" HorizontalAlignment="Right" Margin="0,0,64,14" VerticalAlignment="Bottom" Width="20" Height="22"  RenderTransformOrigin="0.709,0" Grid.Column="1" Click="button_ablaufDOWN_Click" ToolTip="Verschiebt den selektierten Ablauf um eine Stelle nach unten"/>
+        <Button x:Name="button_ablaufDelete" Content="Delete" HorizontalAlignment="Right" Margin="0,0,3,14" VerticalAlignment="Bottom" Width="56" Height="22"  RenderTransformOrigin="0.709,0" Grid.Column="1" Click="button_ablaufDelete_Click" ToolTip="löscht den selektierten Ablauf"/>
+        <Rectangle Margin="0,21,115,0" Fill="#FFDEDEDE" Grid.Column="1" HorizontalAlignment="Right" Width="2"/>
+        <Label x:Name="label_baud_Copy" Content="Verbindung:" HorizontalAlignment="Right" Margin="0,25,189,0" VerticalAlignment="Top" Height="26" Width="80"/>
+    </Grid>
+</Window>
